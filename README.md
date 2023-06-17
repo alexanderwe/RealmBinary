@@ -1,1 +1,2 @@
 ❗This is a test repository for an archive issue seen in Xcode 15 Beta 1. Please do not use this in any way ❗
+Please use the official repository if you want to include Realm into your project: https://github.com/realm/realm-swift
