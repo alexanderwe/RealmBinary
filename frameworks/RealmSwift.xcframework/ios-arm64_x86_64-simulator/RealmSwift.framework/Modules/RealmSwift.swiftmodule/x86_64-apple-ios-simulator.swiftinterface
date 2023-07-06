@@ -1,11 +1,12 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.9 (swiftlang-5.9.0.114.6 clang-1500.0.27.1)
-// swift-module-flags: -target x86_64-apple-ios17.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name RealmSwift
+// swift-compiler-version: Apple Swift version 5.9 (swiftlang-5.9.0.120.7 clang-1500.0.34.3)
+// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name RealmSwift
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 import AuthenticationServices
 import Combine
 import Foundation
 import Realm.Private
+import Realm.Swift
 import Realm
 import Swift
 import Swift
@@ -149,7 +150,7 @@ public struct AppPublisher : Combine.Publisher, @unchecked Swift.Sendable {
   public func receive<S>(on scheduler: S) -> RealmSwift.AppPublisher where S : Combine.Scheduler
 }
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension RLMApp : Foundation.ObservableObject {
+extension RLMApp : Combine.ObservableObject {
   public var objectWillChange: RealmSwift.AppPublisher {
     get
   }
@@ -198,7 +199,7 @@ extension RealmSwiftAsymmetricObject {
   @objc override dynamic open var description: Swift.String {
     @objc get
   }
-  @_Concurrency.MainActor @objc override final public class func _getProperties() -> [RLMProperty]
+  @objc override final public class func _getProperties() -> [RLMProperty]
   @objc override dynamic open class func propertiesMapping() -> [Swift.String : Swift.String]
   @available(*, unavailable, renamed: "propertiesMapping", message: "`_realmColumnNames` private API is unavailable in our Swift SDK, please use the override `.propertiesMapping()` instead.")
   @objc override dynamic open class func _realmColumnNames() -> [Swift.String : Swift.String]
@@ -616,7 +617,7 @@ extension Combine.Publisher {
   public func freeze<T>() -> Combine.Publishers.Map<Self, RealmSwift.RealmCollectionChange<T>> where T : RealmSwift.RealmCollection, Self.Output == RealmSwift.RealmCollectionChange<T>
   public func freeze<T>() -> Combine.Publishers.Map<Self, RealmSwift.SectionedResultsChange<T>> where T : RealmSwift.RealmSectionedResult, Self.Output == RealmSwift.SectionedResultsChange<T>
   public func freeze<T>() -> Combine.Publishers.Map<Self, RealmSwift.RealmMapChange<T>> where T : RealmSwift.RealmKeyedCollection, Self.Output == RealmSwift.RealmMapChange<T>
-  public func freeze<T>() -> Combine.Publishers.Map<Self, RealmSwift.ObjectChange<T>> where T : RealmSwift.ProjectionObservable, T : RealmSwift.ThreadConfined, Self.Output == RealmSwift.ObjectChange<T>
+  public func freeze<T>() -> Combine.Publishers.Map<Self, RealmSwift.ObjectChange<T>> where T : RealmSwift.ProjectionObservable, Self.Output == RealmSwift.ObjectChange<T>
 }
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension Combine.Publisher where Self.Output : RealmSwift.ThreadConfined {
@@ -625,7 +626,7 @@ extension Combine.Publisher where Self.Output : RealmSwift.ThreadConfined {
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension Combine.Publisher {
   public func threadSafeReference<T>() -> RealmSwift.RealmPublishers.MakeThreadSafeObjectChangeset<Self, T> where T : RealmSwiftObject, Self.Output == RealmSwift.ObjectChange<T>
-  public func threadSafeReference<T>() -> RealmSwift.RealmPublishers.MakeThreadSafeObjectChangeset<Self, T> where T : RealmSwift.ProjectionObservable, T : RealmSwift.ThreadConfined, Self.Output == RealmSwift.ObjectChange<T>
+  public func threadSafeReference<T>() -> RealmSwift.RealmPublishers.MakeThreadSafeObjectChangeset<Self, T> where T : RealmSwift.ProjectionObservable, Self.Output == RealmSwift.ObjectChange<T>
   public func threadSafeReference<T>() -> RealmSwift.RealmPublishers.MakeThreadSafeCollectionChangeset<Self, T> where T : RealmSwift.RealmCollection, Self.Output == RealmSwift.RealmCollectionChange<T>
   public func threadSafeReference<T>() -> RealmSwift.RealmPublishers.MakeThreadSafeKeyedCollectionChangeset<Self, T> where T : RealmSwift.RealmKeyedCollection, Self.Output == RealmSwift.RealmMapChange<T>
   public func threadSafeReference<T>() -> RealmSwift.RealmPublishers.MakeThreadSafeSectionedResultsChangeset<Self, T> where T : RealmSwift.RealmSectionedResult, Self.Output == RealmSwift.SectionedResultsChange<T>
@@ -671,11 +672,11 @@ public func valuePublisher<T>(_ object: T, keyPaths: [Swift.String]? = nil) -> R
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 public func valuePublisher<T>(_ collection: T, keyPaths: [Swift.String]? = nil) -> RealmSwift.RealmPublishers.Value<T> where T : RealmSwift.RealmCollection, T : RealmSwift.RealmSubscribable
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-public func valuePublisher<T>(_ projection: T, keyPaths: [Swift.String]? = nil) -> RealmSwift.RealmPublishers.Value<T> where T : RealmSwift.ProjectionObservable, T : RealmSwift.RealmSubscribable, T : RealmSwift.ThreadConfined
+public func valuePublisher<T>(_ projection: T, keyPaths: [Swift.String]? = nil) -> RealmSwift.RealmPublishers.Value<T> where T : RealmSwift.ProjectionObservable, T : RealmSwift.RealmSubscribable
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 public func changesetPublisher<T>(_ object: T, keyPaths: [Swift.String]? = nil) -> RealmSwift.RealmPublishers.ObjectChangeset<T> where T : RealmSwiftObject
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-public func changesetPublisher<T>(_ projection: T, keyPaths: [Swift.String]? = nil) -> RealmSwift.RealmPublishers.ObjectChangeset<T> where T : RealmSwift.ProjectionObservable, T : RealmSwift.ThreadConfined
+public func changesetPublisher<T>(_ projection: T, keyPaths: [Swift.String]? = nil) -> RealmSwift.RealmPublishers.ObjectChangeset<T> where T : RealmSwift.ProjectionObservable
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 public func changesetPublisher<T>(_ collection: T, keyPaths: [Swift.String]? = nil) -> RealmSwift.RealmPublishers.CollectionChangeset<T> where T : RealmSwift.RealmCollection
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
@@ -1333,7 +1334,7 @@ extension RealmSwiftEmbeddedObject : RealmSwift._RealmCollectionValueInsideOptio
   @objc override dynamic open var description: Swift.String {
     @objc get
   }
-  @_Concurrency.MainActor @objc override final public class func _getProperties() -> [RLMProperty]
+  @objc override final public class func _getProperties() -> [RLMProperty]
   @objc dynamic open class func ignoredProperties() -> [Swift.String]
   @objc override dynamic open class func propertiesMapping() -> [Swift.String : Swift.String]
   @available(*, unavailable, renamed: "propertiesMapping", message: "`_realmColumnNames` private API is unavailable in our Swift SDK, please use the override `.propertiesMapping()` instead.")
@@ -1343,6 +1344,24 @@ extension RealmSwiftEmbeddedObject : RealmSwift._RealmCollectionValueInsideOptio
     @objc set
   }
   public func observe<T>(on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.ObjectChange<T>) -> Swift.Void) -> RealmSwift.NotificationToken where T : RLMObjectBase
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A, T>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<T>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor, T : RealmSwiftObject
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A, T>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<T>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor, T : RealmSwiftObject
+  #endif
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A, T>(keyPaths: [Swift.PartialKeyPath<T>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<T>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor, T : RealmSwiftObject
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A, T>(keyPaths: [Swift.PartialKeyPath<T>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<T>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor, T : RealmSwiftObject
+  #endif
+  #endif
   public func dynamicList(_ propertyName: Swift.String) -> RealmSwift.List<RealmSwift.DynamicObject>
   public func isSameObject(as object: RealmSwift.EmbeddedObject?) -> Swift.Bool
 }
@@ -1412,7 +1431,7 @@ extension RealmSwift.Realm {
   @objc func customEventRepresentation() -> Swift.String
 }
 public func _name<T>(for keyPath: Swift.PartialKeyPath<T>) -> Swift.String where T : RLMObjectBase
-public func _name<O, T>(for keyPath: Swift.PartialKeyPath<T>) -> Swift.String where O : RLMObjectBase, O : RealmSwift.RealmCollectionValue, T : RealmSwift.Projection<O>
+public func _name<O, T>(for keyPath: Swift.PartialKeyPath<T>) -> Swift.String where O : RLMObjectBase, O : RealmSwift.RealmCollectionValue, O : RealmSwift.ThreadConfined, T : RealmSwift.Projection<O>
 @frozen public struct LinkingObjects<Element> where Element : RLMObjectBase, Element : RealmSwift.RealmCollectionValue {
   public init(fromType _: Element.Type, property propertyName: Swift.String)
   public var description: Swift.String {
@@ -1527,8 +1546,25 @@ extension Swift.String : RealmSwift._MapKey {
   final public func max<T>(ofProperty property: Swift.String) -> T? where T : RealmSwift._HasPersistedType, T.PersistedType : RealmSwift.MinMaxType
   final public func sum<T>(ofProperty property: Swift.String) -> T where T : RealmSwift._HasPersistedType, T.PersistedType : RealmSwift.AddableType
   final public func average<T>(ofProperty property: Swift.String) -> T? where T : RealmSwift._HasPersistedType, T.PersistedType : RealmSwift.AddableType
-  final public func observe(on queue: Dispatch.DispatchQueue?, _ block: @escaping (RealmSwift.RealmMapChange<RealmSwift.Map<Key, Value>>) -> Swift.Void) -> RealmSwift.NotificationToken
   final public func observe(keyPaths: [Swift.String]? = nil, on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.RealmMapChange<RealmSwift.Map<Key, Value>>) -> Swift.Void) -> RealmSwift.NotificationToken
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor final public func observe<A>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmMapChange<RealmSwift.Map<Key, Value>>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  final public func observe<A>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmMapChange<RealmSwift.Map<Key, Value>>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor final public func observe<A>(keyPaths: [Swift.PartialKeyPath<Value.Wrapped>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmMapChange<RealmSwift.Map<Key, Value>>) -> Swift.Void) async -> RealmSwift.NotificationToken where Value : RealmSwift.OptionalProtocol, A : _Concurrency.Actor, Value.Wrapped : RLMObjectBase
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  final public func observe<A>(keyPaths: [Swift.PartialKeyPath<Value.Wrapped>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmMapChange<RealmSwift.Map<Key, Value>>) -> Swift.Void) async -> RealmSwift.NotificationToken where Value : RealmSwift.OptionalProtocol, A : _Concurrency.Actor, Value.Wrapped : RLMObjectBase
+  #endif
+  #endif
   final public var isFrozen: Swift.Bool {
     get
   }
@@ -1552,12 +1588,12 @@ extension RealmSwift.Map : Swift.Sequence {
   public typealias Iterator = RealmSwift.RLMMapIterator<RealmSwift.SingleMapEntry<Key, Value>>
 }
 extension RealmSwift.Map {
-  public struct KeyValueSequence<Key, Value> : Swift.Sequence where Key : RealmSwift._MapKey, Value : RealmSwift.RealmCollectionValue {
+  public struct KeyValueSequence : Swift.Sequence {
     public func makeIterator() -> RealmSwift.RLMKeyValueIterator<Key, Value>
     public typealias Element = RealmSwift.RLMKeyValueIterator<Key, Value>.Element
     public typealias Iterator = RealmSwift.RLMKeyValueIterator<Key, Value>
   }
-  final public func asKeyValueSequence() -> RealmSwift.Map<Key, Value>.KeyValueSequence<Key, Value>
+  final public func asKeyValueSequence() -> RealmSwift.Map<Key, Value>.KeyValueSequence
 }
 @frozen public enum RealmMapChange<Collection> where Collection : RealmSwift.RealmKeyedCollection {
   case initial(Collection)
@@ -1611,11 +1647,19 @@ extension RLMFindOptions {
     get
     set
   }
+  @available(*, deprecated, message: "Use `sorting`")
   public var sort: RealmSwift.Document? {
     get
     set
   }
+  public var sorting: [RealmSwift.Document] {
+    get
+    set
+  }
+  @available(*, deprecated, message: "Use init(limit:projection:sorting:)")
   convenience public init(_ limit: Swift.Int?, _ projection: RealmSwift.Document?, _ sort: RealmSwift.Document?)
+  convenience public init(_ limit: Swift.Int = 0, _ projection: RealmSwift.Document? = nil, _ sorting: [RealmSwift.Document] = [])
+  @available(*, deprecated, message: "Use init(limit:projection:sorting:)")
   convenience public init(limit: Swift.Int?, projection: RealmSwift.Document?, sort: RealmSwift.Document?)
 }
 public typealias FindOneAndModifyOptions = RLMFindOneAndModifyOptions
@@ -1624,11 +1668,19 @@ extension RLMFindOneAndModifyOptions {
     get
     set
   }
+  @available(*, deprecated, message: "Use `sorting`")
   public var sort: RealmSwift.Document? {
     get
     set
   }
+  public var sorting: [RealmSwift.Document] {
+    get
+    set
+  }
+  @available(*, deprecated, message: "Use init(projection:sorting:upsert:shouldReturnNewDocument:)")
   convenience public init(_ projection: RealmSwift.Document?, _ sort: RealmSwift.Document?, _ upsert: Swift.Bool = false, _ shouldReturnNewDocument: Swift.Bool = false)
+  convenience public init(_ projection: RealmSwift.Document?, _ sorting: [RealmSwift.Document] = [], _ upsert: Swift.Bool = false, _ shouldReturnNewDocument: Swift.Bool = false)
+  @available(*, deprecated, message: "Use init(projection:sorting:upsert:shouldReturnNewDocument:)")
   convenience public init(projection: RealmSwift.Document?, sort: RealmSwift.Document?, upsert: Swift.Bool = false, shouldReturnNewDocument: Swift.Bool = false)
 }
 public typealias UpdateResult = RLMUpdateResult
@@ -1802,11 +1854,11 @@ extension RLMMongoCollection {
   #endif
 }
 #if compiler(>=5.3) && $Sendable
-@available(macOS 10.15, watchOS 6.0, iOS 13.0, iOSApplicationExtension 13.0, macOSApplicationExtension 10.15, tvOS 13.0, macCatalyst 13.0, macCatalystApplicationExtension 13.0, *)
+@available(macOS 10.15, watchOS 6.0, iOS 13.0, tvOS 13.0, macCatalyst 13.0, *)
 @usableFromInline
 internal func future<T>(_ fn: @escaping (@escaping @Sendable (Swift.Result<T, any Swift.Error>) -> Swift.Void) -> Swift.Void) -> Combine.Future<T, any Swift.Error>
 #endif
-@available(macOS 10.15, watchOS 6.0, iOS 13.0, iOSApplicationExtension 13.0, macOSApplicationExtension 10.15, tvOS 13.0, macCatalyst 13.0, macCatalystApplicationExtension 13.0, *)
+@available(macOS 10.15, watchOS 6.0, iOS 13.0, tvOS 13.0, macCatalyst 13.0, *)
 extension RLMMongoCollection {
   public func insertOne(_ document: RealmSwift.Document) -> Combine.Future<RealmSwift.AnyBSON, any Swift.Error>
   public func insertMany(_ documents: [RealmSwift.Document]) -> Combine.Future<[RealmSwift.AnyBSON], any Swift.Error>
@@ -1984,7 +2036,7 @@ extension RealmSwiftObject : RealmSwift._RealmCollectionValueInsideOptional {
   @objc override dynamic open var description: Swift.String {
     @objc get
   }
-  @_Concurrency.MainActor @objc override final public class func _getProperties() -> [RLMProperty]
+  @objc override final public class func _getProperties() -> [RLMProperty]
   @objc dynamic open class func primaryKey() -> Swift.String?
   @objc dynamic open class func ignoredProperties() -> [Swift.String]
   @objc dynamic open class func indexedProperties() -> [Swift.String]
@@ -1997,6 +2049,24 @@ extension RealmSwiftObject : RealmSwift._RealmCollectionValueInsideOptional {
   }
   public func observe<T>(keyPaths: [Swift.String]? = nil, on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.ObjectChange<T>) -> Swift.Void) -> RealmSwift.NotificationToken where T : RLMObjectBase
   public func observe<T>(keyPaths: [Swift.PartialKeyPath<T>], on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.ObjectChange<T>) -> Swift.Void) -> RealmSwift.NotificationToken where T : RLMObjectBase
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A, T>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<T>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor, T : RealmSwiftObject
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A, T>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<T>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor, T : RealmSwiftObject
+  #endif
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A, T>(keyPaths: [Swift.PartialKeyPath<T>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<T>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor, T : RealmSwiftObject
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A, T>(keyPaths: [Swift.PartialKeyPath<T>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<T>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor, T : RealmSwiftObject
+  #endif
+  #endif
   public func dynamicList(_ propertyName: Swift.String) -> RealmSwift.List<RealmSwift.DynamicObject>
   public func dynamicMutableSet(_ propertyName: Swift.String) -> RealmSwift.MutableSet<RealmSwift.DynamicObject>
   public func dynamicMap<Key>(_ propertyName: Swift.String) -> RealmSwift.Map<Key, RealmSwift.DynamicObject?> where Key : RealmSwift._MapKey
@@ -2311,18 +2381,18 @@ extension RealmSwift.Persisted {
     get
     set
   }
-  public static subscript<EnclosingSelf>(_enclosingInstance observed: EnclosingSelf, wrapped wrappedKeyPath: Swift.ReferenceWritableKeyPath<EnclosingSelf, Value>, storage storageKeyPath: Swift.ReferenceWritableKeyPath<EnclosingSelf, RealmSwift.Projected<T, Value>>) -> Value where T : RealmSwift.RealmCollectionValue, EnclosingSelf : RealmSwift.Projection<T> {
+  public static subscript<EnclosingSelf>(_enclosingInstance observed: EnclosingSelf, wrapped wrappedKeyPath: Swift.ReferenceWritableKeyPath<EnclosingSelf, Value>, storage storageKeyPath: Swift.ReferenceWritableKeyPath<EnclosingSelf, RealmSwift.Projected<T, Value>>) -> Value where T : RealmSwift.RealmCollectionValue, T : RealmSwift.ThreadConfined, EnclosingSelf : RealmSwift.Projection<T> {
     get
     set
   }
   public init(_ projectedKeyPath: Swift.KeyPath<T, Value>)
 }
-public protocol ProjectionObservable : AnyObject {
+public protocol ProjectionObservable : AnyObject, RealmSwift.ThreadConfined {
   associatedtype Root : RLMObjectBase
   var rootObject: Self.Root { get }
   init(projecting object: Self.Root)
 }
-open class Projection<Root> : RealmSwift.RealmCollectionValue, RealmSwift.ProjectionObservable where Root : RLMObjectBase, Root : RealmSwift.RealmCollectionValue {
+open class Projection<Root> : RealmSwift.RealmCollectionValue, RealmSwift.ProjectionObservable where Root : RLMObjectBase, Root : RealmSwift.RealmCollectionValue, Root : RealmSwift.ThreadConfined {
   public typealias PersistedType = Root
   final public let rootObject: Root
   required public init(projecting object: Root)
@@ -2338,8 +2408,26 @@ open class Projection<Root> : RealmSwift.RealmCollectionValue, RealmSwift.Projec
   }
 }
 extension RealmSwift.ProjectionObservable {
-  public func observe(keyPaths: [Swift.String] = [], on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.ObjectChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
+  public func observe(keyPaths: [Swift.String]? = nil, on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.ObjectChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
   public func observe(keyPaths: [Swift.PartialKeyPath<Self>], on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.ObjectChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A>(keyPaths: [Swift.PartialKeyPath<Self>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A>(keyPaths: [Swift.PartialKeyPath<Self>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.ObjectChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
 }
 @frozen public struct ProjectedPropertyChange {
   public let name: Swift.String
@@ -2352,7 +2440,7 @@ extension RealmSwift.Projection {
   public func removeObserver(_ observer: ObjectiveC.NSObject, forKeyPath keyPath: Swift.String, context: Swift.UnsafeMutableRawPointer?)
   public func removeObserver(_ observer: ObjectiveC.NSObject, forKeyPath keyPath: Swift.String)
 }
-extension RealmSwift.Projection : RealmSwift.ThreadConfined where Root : RealmSwift.ThreadConfined {
+extension RealmSwift.Projection : RealmSwift.ThreadConfined {
   public var realm: RealmSwift.Realm? {
     get
   }
@@ -2371,7 +2459,7 @@ extension RealmSwift.ProjectionObservable {
   public func _observe<S>(_ keyPaths: [Swift.String]?, _ subscriber: S) -> RealmSwift.NotificationToken where S : Combine.Subscriber, S.Input == ()
 }
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension RealmSwift.Projection : Combine.ObservableObject, RealmSwift.RealmSubscribable where Root : RealmSwift.ThreadConfined {
+extension RealmSwift.Projection : Combine.ObservableObject, RealmSwift.RealmSubscribable {
   public var objectWillChange: RealmSwift.RealmPublishers.WillChange<RealmSwift.Projection<Root>> {
     get
   }
@@ -2381,6 +2469,7 @@ extension RealmSwift.Projection : Combine.ObservableObject, RealmSwift.RealmSubs
 @propertyWrapper internal struct Unchecked<Wrapped> : @unchecked Swift.Sendable {
   public var wrappedValue: Wrapped
   public init(wrappedValue: Wrapped)
+  public init(_ wrappedValue: Wrapped)
 }
 @frozen public struct Property : Swift.CustomStringConvertible {
   internal let rlmProperty: RLMProperty
@@ -2805,6 +2894,27 @@ extension RealmSwift.Realm {
   #if compiler(>=5.3) && $AsyncAwait
   @_Concurrency.MainActor public init(configuration: RealmSwift.Realm.Configuration = .defaultConfiguration, downloadBeforeOpen: RealmSwift.Realm.OpenBehavior = .never) async throws
   #endif
+  #if compiler(>=5.3) && $AsyncAwait
+  public init<A>(configuration: RealmSwift.Realm.Configuration = .defaultConfiguration, actor: A, downloadBeforeOpen: RealmSwift.Realm.OpenBehavior = .never) async throws where A : _Concurrency.Actor
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait
+  #if $UnsafeInheritExecutor
+  @discardableResult
+  @_unsafeInheritExecutor public func asyncWrite<Result>(_ block: (() throws -> Result)) async throws -> Result
+  #else
+  @discardableResult
+  public func asyncWrite<Result>(_ block: (() throws -> Result)) async throws -> Result
+  #endif
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait
+  #if $UnsafeInheritExecutor
+  @discardableResult
+  @_unsafeInheritExecutor public func asyncRefresh() async -> Swift.Bool
+  #else
+  @discardableResult
+  public func asyncRefresh() async -> Swift.Bool
+  #endif
+  #endif
 }
 public protocol RealmFetchable : RealmSwift.RealmCollectionValue {
   static func className() -> Swift.String
@@ -2814,6 +2924,7 @@ extension RealmSwiftObject : RealmSwift.RealmFetchable {
 extension RealmSwift.Projection : RealmSwift.RealmFetchable {
   public static func className() -> Swift.String
 }
+public typealias Logger = RLMLogger
 @frozen public struct RLMIterator<Element> : Swift.IteratorProtocol where Element : RealmSwift.RealmCollectionValue {
   private var generatorBase: Foundation.NSFastEnumerationIterator
   public mutating func next() -> Element?
@@ -2902,6 +3013,15 @@ public protocol RealmCollection : RealmSwift.RealmCollectionBase, Swift.Equatabl
   func value(forKeyPath keyPath: Swift.String) -> Any?
   func setValue(_ value: Any?, forKey key: Swift.String)
   func observe(keyPaths: [Swift.String]?, on queue: Dispatch.DispatchQueue?, _ block: @escaping (RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor func observe<A>(keyPaths: [Swift.String]?, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  func observe<A>(keyPaths: [Swift.String]?, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
   var isFrozen: Swift.Bool { get }
   func freeze() -> Self
   func thaw() -> Self?
@@ -2958,13 +3078,33 @@ extension RealmSwift.RealmCollection {
   public func filter(_ predicateFormat: Swift.String, _ args: Any...) -> RealmSwift.Results<Self.Element>
 }
 extension RealmSwift.RealmCollection {
-  public func observe<T>(keyPaths: [Swift.PartialKeyPath<T>], on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken where T : RLMObjectBase
   public func observe(keyPaths: [Swift.String]? = nil, on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
+}
+extension RealmSwift.RealmCollection where Self.Element : RLMObjectBase {
+  public func observe(keyPaths: [Swift.PartialKeyPath<Self.Element>], on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A>(keyPaths: [Swift.PartialKeyPath<Self.Element>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A>(keyPaths: [Swift.PartialKeyPath<Self.Element>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.RealmCollectionChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
 }
 extension RealmSwift.RealmCollection {
-  public func sectioned<Key, O>(by keyPath: Swift.KeyPath<Self.Element, Key>, ascending: Swift.Bool = true) -> RealmSwift.SectionedResults<Key, Self.Element> where Key : RealmSwift._Persistable, Key : Swift.Hashable, O : RLMObjectBase, Self.Element : RealmSwift.Projection<O>
-  public func sectioned<Key, O>(by keyPath: Swift.KeyPath<Self.Element, Key>, sortDescriptors: [RealmSwift.SortDescriptor]) -> RealmSwift.SectionedResults<Key, Self.Element> where Key : RealmSwift._Persistable, Key : Swift.Hashable, O : RLMObjectBase, Self.Element : RealmSwift.Projection<O>
-  public func sectioned<Key, O>(by block: @escaping ((Self.Element) -> Key), sortDescriptors: [RealmSwift.SortDescriptor]) -> RealmSwift.SectionedResults<Key, Self.Element> where Key : RealmSwift._Persistable, Key : Swift.Hashable, O : RLMObjectBase, Self.Element : RealmSwift.Projection<O>
+  public func sectioned<Key, O>(by keyPath: Swift.KeyPath<Self.Element, Key>, ascending: Swift.Bool = true) -> RealmSwift.SectionedResults<Key, Self.Element> where Key : RealmSwift._Persistable, Key : Swift.Hashable, O : RLMObjectBase, O : RealmSwift.ThreadConfined, Self.Element : RealmSwift.Projection<O>
+  public func sectioned<Key, O>(by keyPath: Swift.KeyPath<Self.Element, Key>, sortDescriptors: [RealmSwift.SortDescriptor]) -> RealmSwift.SectionedResults<Key, Self.Element> where Key : RealmSwift._Persistable, Key : Swift.Hashable, O : RLMObjectBase, O : RealmSwift.ThreadConfined, Self.Element : RealmSwift.Projection<O>
+  public func sectioned<Key, O>(by block: @escaping ((Self.Element) -> Key), sortDescriptors: [RealmSwift.SortDescriptor]) -> RealmSwift.SectionedResults<Key, Self.Element> where Key : RealmSwift._Persistable, Key : Swift.Hashable, O : RLMObjectBase, O : RealmSwift.ThreadConfined, Self.Element : RealmSwift.Projection<O>
 }
 @frozen public struct AnyRealmCollection<Element> where Element : RealmSwift.RealmCollectionValue {
   internal let collection: any RLMCollection
@@ -3121,11 +3261,13 @@ public protocol RealmKeyedCollection : RealmSwift.ThreadConfined, Swift.CustomSt
   func max<T>(ofProperty property: Swift.String) -> T? where T : RealmSwift._HasPersistedType, T.PersistedType : RealmSwift.MinMaxType
   func sum<T>(ofProperty property: Swift.String) -> T where T : RealmSwift._HasPersistedType, T.PersistedType : RealmSwift.AddableType
   func average<T>(ofProperty property: Swift.String) -> T? where T : RealmSwift._HasPersistedType, T.PersistedType : RealmSwift.AddableType
-  func observe(on queue: Dispatch.DispatchQueue?, _ block: @escaping (RealmSwift.RealmMapChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
   func observe(keyPaths: [Swift.String]?, on queue: Dispatch.DispatchQueue?, _ block: @escaping (RealmSwift.RealmMapChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
   var isFrozen: Swift.Bool { get }
   func freeze() -> Self
   func thaw() -> Self?
+}
+extension RealmSwift.RealmKeyedCollection {
+  public func observe(keyPaths: [Swift.String]? = nil, on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.RealmMapChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
 }
 extension RealmSwift.RealmKeyedCollection where Self.Value : RealmSwift.OptionalProtocol, Self.Value.Wrapped : RLMObjectBase {
   public func min<T>(of keyPath: Swift.KeyPath<Self.Value.Wrapped, T>) -> T? where T : RealmSwift._HasPersistedType, T.PersistedType : RealmSwift.MinMaxType
@@ -3363,12 +3505,39 @@ public protocol RealmSectionedResult : RealmSwift.ThreadConfined, Swift.Equatabl
 }
 extension RealmSwift.RealmSectionedResult {
   public func observe(keyPaths: [Swift.String]? = nil, on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A>(keyPaths: [Swift.String]? = nil, on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
 }
 extension RealmSwift.RealmSectionedResult where Self.Element : RealmSwift.RealmSectionedResult, Self.Element.Element : RLMObjectBase {
   public func observe(keyPaths: [Swift.PartialKeyPath<Self.Element.Element>], on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A>(keyPaths: [Swift.PartialKeyPath<Self.Element.Element>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A>(keyPaths: [Swift.PartialKeyPath<Self.Element.Element>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
 }
 extension RealmSwift.RealmSectionedResult where Self.Element : RLMObjectBase {
   public func observe(keyPaths: [Swift.PartialKeyPath<Self.Element>], on queue: Dispatch.DispatchQueue? = nil, _ block: @escaping (RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) -> RealmSwift.NotificationToken
+  #if compiler(>=5.3) && $AsyncAwait && $Sendable
+  #if $UnsafeInheritExecutor
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  @_unsafeInheritExecutor public func observe<A>(keyPaths: [Swift.PartialKeyPath<Self.Element>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #else
+  @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
+  public func observe<A>(keyPaths: [Swift.PartialKeyPath<Self.Element>], on actor: A, _ block: @escaping @Sendable (isolated A, RealmSwift.SectionedResultsChange<Self>) -> Swift.Void) async -> RealmSwift.NotificationToken where A : _Concurrency.Actor
+  #endif
+  #endif
 }
 public struct SectionedResults<Key, SectionElement> where Key : RealmSwift._Persistable, Key : Swift.Hashable, SectionElement : RealmSwift.RealmCollectionValue {
   public typealias Element = RealmSwift.ResultsSection<Key, SectionElement>
@@ -3645,7 +3814,7 @@ extension RealmSwift.BoundCollection where Self.Element : RealmSwiftObject, Self
   @_Concurrency.MainActor(unsafe) public func append(_ value: RealmSwift.Results<Self.Element>.Element)
 }
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-extension RealmSwift.BoundCollection where Self.Element : RealmSwift.ProjectionObservable, Self.Element : RealmSwift.ThreadConfined, Self.Value == RealmSwift.Results<Self.Element>, Self.Element.Root : RealmSwiftObject {
+extension RealmSwift.BoundCollection where Self.Element : RealmSwift.ProjectionObservable, Self.Value == RealmSwift.Results<Self.Element>, Self.Element.Root : RealmSwiftObject {
   @_Concurrency.MainActor(unsafe) public func append(_ value: RealmSwift.Results<Self.Element>.Element)
 }
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
@@ -3808,6 +3977,7 @@ extension RLMCompensatingWriteInfo {
   }
 }
 public typealias AppError = RLMAppError
+@available(*, deprecated)
 public typealias SyncLogLevel = RLMSyncLogLevel
 public typealias Provider = RLMIdentityProvider
 @frozen public enum ClientResetMode {
